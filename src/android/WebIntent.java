@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
+import android.text.TextUtils;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -90,7 +91,12 @@ public class WebIntent extends CordovaPlugin {
                 if (i.hasExtra(extraName)) {
                     String r = i.getStringExtra(extraName);
                     if (null == r) {
-                        r = ((Uri) i.getParcelableExtra(extraName)).toString();
+                        if (i.getParcelableExtra(extraName) != null){
+                            r = ((Uri) i.getParcelableExtra(extraName)).toString();
+                        }
+                        if (i.getParcelableArrayListExtra(extraName) != null){
+                            r = TextUtils.join(",", i.getParcelableArrayListExtra(extraName));
+                        }
                     }
 
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, r));
